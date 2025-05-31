@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
-    public float MoveSpeed = 5f;
+    public float MoveSpeed = 10f;
     public Rigidbody2D Rb;
     public Animator anim;
-
+    public Image Heart; 
+    public float hp;
+    public float maxHp = 100f;
     public float MoveX, MoveY;
     private bool isMoving;
   
@@ -16,6 +18,7 @@ public class PlayerController : MonoBehaviour
     {
        anim = GetComponent<Animator>();
         
+        hp = maxHp;
     }
 
     // Update is called once per frame
@@ -23,12 +26,19 @@ public class PlayerController : MonoBehaviour
     {
         MoveX = Input. GetAxisRaw("Horizontal"); 
          MoveY = Input.GetAxisRaw("Vertical");
-        
+    
         
         Move();
         Animation();
+        Attack();
+        Debug.Log(hp);
+    
+    
     }
-
+    void UpdateUI()
+    {
+        Heart.fillAmount = hp / maxHp;
+    }
 
     void Move()
     {
@@ -36,6 +46,16 @@ public class PlayerController : MonoBehaviour
         Rb.MovePosition(transform.position + Direcao * MoveSpeed * Time.deltaTime);
 
     }   
+
+
+
+    void Attack()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            anim.SetTrigger("isAttack");
+        }
+    }
 
     void Animation()
     {
